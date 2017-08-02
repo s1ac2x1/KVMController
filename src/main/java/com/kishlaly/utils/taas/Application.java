@@ -18,6 +18,7 @@ import org.springframework.context.event.ContextStoppedEvent;
 public class Application implements ApplicationListener<ContextStoppedEvent> {
 
     public static void main(String[] args) {
+        System.setProperty("jna.library.path", "/usr/lib/");
         SpringApplication.run(Application.class, args);
     }
 

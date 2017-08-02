@@ -14,7 +14,7 @@ import java.util.function.Supplier;
  */
 @RestController
 @RequestMapping(value = "/api/vm")
-public class KVMController {
+public class MainController {
 
     @Autowired
     private VirtualizationService virtualizationService;
@@ -39,7 +39,7 @@ public class KVMController {
         try {
             vmState = supplier.get();
         } catch (Exception e) {
-            vmState = msg + ": " + e.getLocalizedMessage();
+            vmState = msg + ": " + e.getMessage();
         } finally {
             return vmState;
         }
