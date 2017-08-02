@@ -1,16 +1,22 @@
 package com.kishlaly.utils.taas.services.impl;
 
+import com.kishlaly.utils.taas.annotations.Connection;
+import com.kishlaly.utils.taas.exceptions.ConnectionException;
 import com.kishlaly.utils.taas.exceptions.MACAddressException;
 import com.kishlaly.utils.taas.services.VirtualizationService;
 import com.kishlaly.utils.taas.utils.MACAddressValidation;
-import org.springframework.stereotype.Component;
+import org.libvirt.Connect;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Vladimir Kishlaly
  * @since 02.08.2017
  */
-@Component
+@Service
 public class KVMService implements VirtualizationService {
+
+    @Connection(url = "test:///default")
+    private Connect connection;
 
     @Override
     public String start(String macAddress) {
@@ -33,6 +39,9 @@ public class KVMService implements VirtualizationService {
     private void validate(String macAddress) {
         if (!MACAddressValidation.isValid(macAddress.toUpperCase())) {
             throw new MACAddressException("Illegal MAC Address: " + macAddress);
+        }
+        if (connection == null) {
+            throw new ConnectionException("Connection closed");
         }
     }
 

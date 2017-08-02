@@ -13,6 +13,8 @@ repositories {
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile group: 'org.libvirt', name: 'libvirt', version: '0.5.1'
+    testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
