@@ -1,5 +1,6 @@
 package com.kishlaly.utils.taas.controllers;
 
+import com.kishlaly.utils.taas.i18n.Localization;
 import com.kishlaly.utils.taas.services.VirtualizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,30 +9,36 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.function.Supplier;
 
+import static com.kishlaly.utils.taas.i18n.LocalizationKeys.START_FAILED;
+import static com.kishlaly.utils.taas.i18n.LocalizationKeys.STATUS_FAILED;
+import static com.kishlaly.utils.taas.i18n.LocalizationKeys.STOP_FAILED;
+
 /**
  * @author Vladimir Kishlaly
  * @since 02.08.2017
  */
 @RestController
-@RequestMapping(value = "/api/vm")
+@RequestMapping(value = "${api.root}")
 public class MainController {
 
     @Autowired
     private VirtualizationService virtualizationService;
+    @Autowired
+    private Localization i18n;
 
-    @RequestMapping("/start/{macAddress}")
-    public String start(@PathVariable(value = "macAddress") String macAddress) {
-        return action(() -> virtualizationService.start(orEmpty(macAddress)), "Failed to start");
+    @RequestMapping("${api.start}/{mac}")
+    public String start(@PathVariable(value = "mac") String mac) {
+        return action(() -> virtualizationService.start(orEmpty(mac)), i18n.get(START_FAILED));
     }
 
-    @RequestMapping("/stop/{macAddress}")
-    public String stop(@PathVariable(value = "macAddress") String macAddress) {
-        return action(() -> virtualizationService.stop(orEmpty(macAddress)), "Failed to stop");
+    @RequestMapping("${api.stop}/{mac}")
+    public String stop(@PathVariable(value = "mac") String mac) {
+        return action(() -> virtualizationService.stop(orEmpty(mac)), i18n.get(STOP_FAILED));
     }
 
-    @RequestMapping("/status/{macAddress}")
-    public String getStatus(@PathVariable(value = "macAddress") String macAddress) {
-        return action(() -> virtualizationService.getStatus(orEmpty(macAddress)), "Failed to get VM status");
+    @RequestMapping("${api.status}/{mac}")
+    public String getStatus(@PathVariable(value = "mac") String mac) {
+        return action(() -> virtualizationService.getStatus(orEmpty(mac)), i18n.get(STATUS_FAILED));
     }
 
     private String action(Supplier<String> supplier, String msg) {
